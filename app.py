@@ -2,13 +2,13 @@ from flask import Flask, request
 import logging
 import os
 import consul
+import pulsar
 from json import dumps
-from kafka import KafkaProducer, KafkaClient
 from api_client.client import SonarrClient, RadarrClient
 
 application = Flask(__name__)
 application.logger.setLevel(logging.DEBUG)
-required_configs = ['KAFKA_TOPIC', 'KAFKA_SERVER']
+required_configs = ['PULSAR_SERVER', 'PULSAR_TOPIC']
 CONFIG_PATH = "handbrake-webhook"
 
 
@@ -19,10 +19,6 @@ def index():
 
 @application.route('/webhook', methods=['POST'])
 def web_hook():
-    producer = KafkaProducer(bootstrap_servers=[get_config('KAFKA_SERVER')],
-                             acks=1,
-                             value_serializer=lambda x:
-                             dumps(x).encode('utf-8'))
     application.logger.info("Web hook called")
     application.logger.debug("Web hook headers: {}".format(request.headers))
     application.logger.debug("Web hook data: {}".format(request.get_json()))
@@ -37,33 +33,38 @@ def web_hook():
         client = SonarrClient(request.get_json())
         path = client.get_full_file_path()
         quality = client.get_quality_level()
-        send_message(path, producer, quality, 'tv')
+        send_message(path, quality, 'tv')
     elif 'Radarr' in user_agent:
         client = RadarrClient(request.get_json())
         path = client.get_full_file_path()
         quality = client.get_quality_level()
-        send_message(path, producer, quality, 'movie')
+        send_message(path, quality, 'movie')
     else:
         raise Exception("Boom!  Unexpected user agent: {}".format(user_agent))
     return 'Done'
 
 
-def send_message(path, producer, quality, type):
+def send_message(path, quality, type):
+    pulsar_server = get_config('PULSAR_SERVER')
+    pulsar_topic = get_config('PULSAR_TOPIC')
     application.logger.info("Calculated file path is {}".format(path))
     application.logger.info("Calculated quality level is {}".format(quality))
-    kafka_message = {'source_full_path': path, 'move_type': 'to_encode',
-                     'type': type, 'quality': quality}
-    application.logger.info("Sending message {} to topic '{}'".format(kafka_message, get_config("KAFKA_TOPIC")))
-    future = producer.send(topic=get_config("KAFKA_TOPIC"),
-                           value=kafka_message)
-    future.get(timeout=60)
+    if pulsar_server and pulsar_topic:
+        client = pulsar.Client(f"pulsar://{pulsar_server}")
+        producer = client.create_producer(pulsar_topic)
+        message = {'source_full_path': path, 'move_type': 'to_encode', 'type': type, 'quality': quality}
+        application.logger.info(f"Sending message {message} to topic '{pulsar_topic}'")
+        producer.send(dumps(message).encode('utf-8'))
+        application.logger.info(f"Notification sent: message body '{message}', topic '{pulsar_topic}'")
+        client.close()
+    else:
+        application.logger.warning("PULSAR_SERVER or PULSAR_TOPIC was not found in configs, no messages will be sent")
 
 
 @application.route('/health')
 def health_check():
-    client = KafkaClient(bootstrap_servers=[get_config('KAFKA_SERVER')])
-    if not client.bootstrap_connected():
-        raise Exception("Unable to connect to Kafka: {}".format(get_config('KAFKA_SERVER')))
+    # client = pulsar.Client(f"pulsar://{get_config('PULSAR_SERVER')}")
+    # client.get_topic_partitions(get_config('PULSAR_TOPIC'))
     return "Success"
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.0.0](https://github.com/chrisjohnson00/handbrake-webhook/tree/v2.0.0) (2021-08-15)
+
+[Full Changelog](https://github.com/chrisjohnson00/handbrake-webhook/compare/v1.1.0...v2.0.0)
+
+**Breaking changes:**
+
+- feat: migrating from kafka to pulsar [\#93](https://github.com/chrisjohnson00/handbrake-webhook/pull/93) ([chrisjohnson00](https://github.com/chrisjohnson00))
+
 ## [v1.1.0](https://github.com/chrisjohnson00/handbrake-webhook/tree/v1.1.0) (2021-03-04)
 
 [Full Changelog](https://github.com/chrisjohnson00/handbrake-webhook/compare/v1.0.2...v1.1.0)

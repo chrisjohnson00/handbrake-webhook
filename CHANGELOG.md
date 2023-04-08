@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.1.1](https://github.com/chrisjohnson00/handbrake-webhook/tree/v2.1.1) (2023-04-08)
+
+[Full Changelog](https://github.com/chrisjohnson00/handbrake-webhook/compare/v2.1.0...v2.1.1)
+
+**Merged pull requests:**
+
+- ci: updating dependabot to not use develop and run monthly [\#187](https://github.com/chrisjohnson00/handbrake-webhook/pull/187) ([chrisjohnson00](https://github.com/chrisjohnson00))
+
 ## [v2.1.0](https://github.com/chrisjohnson00/handbrake-webhook/tree/v2.1.0) (2023-04-08)
 
 [Full Changelog](https://github.com/chrisjohnson00/handbrake-webhook/compare/v2.0.0...v2.1.0)

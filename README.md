@@ -8,23 +8,12 @@ A webhook receiver for Sonarr/Radarr that copies files for the handbrake pipelin
     pip install -r requirements.txt
 
 
-## Run Locally
-
-    echo "Starting Kafka locally"
-    docker-compose up -d
-    export watch1080p=/1080p
-    export watch720p=/720p
-    export KAFKA_SERVER=localhost:9092
-    export KAFKA_TOPIC=bla
-    export FLASK_ENV=development
-    flask run
-
 ## Updating PyPi deps
 
+    docker run -it --rm -v ${PWD}:/repo -w /repo python:3.11-slim bash
     pip install --upgrade pip 
-    pip install --upgrade pip Flask gunicorn python-consul pulsar-client fastavro==0.24.0
+    pip install --upgrade pip Flask gunicorn python-consul pulsar-client fastavro pyyaml
     pip freeze > requirements.txt
-    sed -i '/pkg_resources/d' requirements.txt
 
 
 ## Sample Request
@@ -67,4 +56,25 @@ Request body:
   "downloadId":"1748AB53BB522968DC2E400F91EA33FF95CD5F11",
   "eventType":"Download"
 }
+```
+
+### Skip Config
+
+Set an env var named `SKIP_CONFIG_FILE` with the path to a YAML file with the following schema:
+
+```yaml
+patterns_to_skip:
+  - name: 'STRING'
+    match_string: "STRING"
+```
+
+
+Example:
+
+```yaml
+patterns_to_skip:
+  - name: 'The Daily Show'
+    match_string: "/The Daily Show/"
+  - name: "The Tonight Show"
+    match_string: "/The Tonight Show Starring Jimmy Fallon/"
 ```

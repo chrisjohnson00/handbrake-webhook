@@ -4,6 +4,7 @@ import os
 import consul
 import pulsar
 from json import dumps
+from utilities.skip import skip_send
 from api_client.client import SonarrClient, RadarrClient
 
 application = Flask(__name__)
@@ -33,7 +34,10 @@ def web_hook():
         client = SonarrClient(request.get_json())
         path = client.get_full_file_path()
         quality = client.get_quality_level()
-        send_message(path, quality, 'tv')
+        if not skip_send(path):
+            send_message(path, quality, 'tv')
+        else:
+            application.logger.info(f"Skipping {path} due to SKIP_CONFIG_FILE match")
     elif 'Radarr' in user_agent:
         client = RadarrClient(request.get_json())
         path = client.get_full_file_path()

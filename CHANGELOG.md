@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.1.0](https://github.com/chrisjohnson00/handbrake-webhook/tree/v2.1.0) (2023-04-08)
+
+[Full Changelog](https://github.com/chrisjohnson00/handbrake-webhook/compare/v2.0.0...v2.1.0)
+
+**Implemented enhancements:**
+
+- feat: adding optional tv file skip config [\#186](https://github.com/chrisjohnson00/handbrake-webhook/pull/186) ([chrisjohnson00](https://github.com/chrisjohnson00))
+
 ## [v2.0.0](https://github.com/chrisjohnson00/handbrake-webhook/tree/v2.0.0) (2021-08-15)
 
 [Full Changelog](https://github.com/chrisjohnson00/handbrake-webhook/compare/v1.1.0...v2.0.0)

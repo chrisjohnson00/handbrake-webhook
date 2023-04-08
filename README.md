@@ -20,7 +20,7 @@ A webhook receiver for Sonarr/Radarr that copies files for the handbrake pipelin
 
     docker run -it --rm -v ${PWD}:/repo -w /repo python:3.11-slim bash
     pip install --upgrade pip 
-    pip install --upgrade pip Flask gunicorn python-consul pulsar-client fastavro
+    pip install --upgrade pip Flask gunicorn python-consul pulsar-client fastavro pyyaml
     pip freeze > requirements.txt
 
 

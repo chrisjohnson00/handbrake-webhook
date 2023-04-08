@@ -8,14 +8,6 @@ A webhook receiver for Sonarr/Radarr that copies files for the handbrake pipelin
     pip install -r requirements.txt
 
 
-## Run Locally
-
-    docker-compose up -d
-    export watch1080p=/1080p
-    export watch720p=/720p
-    export FLASK_ENV=development
-    flask run
-
 ## Updating PyPi deps
 
     docker run -it --rm -v ${PWD}:/repo -w /repo python:3.11-slim bash

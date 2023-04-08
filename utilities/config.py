@@ -8,8 +8,7 @@ class ConfigFileReader:
         self.read_config()
 
     def read_config(self):
-        file_path = f"game_manager/config/{self.config_file}"
-        with open(file_path, 'r') as stream:
+        with open(self.config_file, 'r') as stream:
             try:
                 parsed_yaml = yaml.safe_load(stream)
             except yaml.YAMLError as exc:

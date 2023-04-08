@@ -15,7 +15,7 @@ class TestConfigFileReader(TestCase):
             yaml.dump(test_config, f)
 
         # test the ConfigFileReader class
-        reader = ConfigFileReader("test_config.yml")
+        reader = ConfigFileReader("game_manager/config/test_config.yml")
         config = reader.get_config()
         self.assertEqual(config, test_config)
 

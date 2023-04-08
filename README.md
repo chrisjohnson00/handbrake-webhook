@@ -57,3 +57,24 @@ Request body:
   "eventType":"Download"
 }
 ```
+
+### Skip Config
+
+Set an env var named `SKIP_CONFIG_FILE` with the path to a YAML file with the following schema:
+
+```yaml
+patterns_to_skip:
+  - name: 'STRING'
+    match_string: "STRING"
+```
+
+
+Example:
+
+```yaml
+patterns_to_skip:
+  - name: 'The Daily Show'
+    match_string: "/The Daily Show/"
+  - name: "The Tonight Show"
+    match_string: "/The Tonight Show Starring Jimmy Fallon/"
+```
